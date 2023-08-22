@@ -2,12 +2,15 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Item } from '../entites/items.entity';
 import { Repository } from 'typeorm';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bull';
 
 @Injectable()
 export class InventoryService {
   constructor(
     @InjectRepository(Item)
     private itemRepository: Repository<Item>,
+    @InjectQueue('notify') private notifyQueue: Queue,
   ) {}
 
   async findAll(): Promise<Item[]> {
@@ -34,6 +37,10 @@ export class InventoryService {
 
   async updateQuantity(id: number, quantity: number): Promise<Item> {
     const item = await this.itemRepository.findOneBy({ id });
+    if (quantity <= item.notifyNo) {
+      console.log('Warning!');
+      await this.notifyQueue.add('inventory', item);
+    }
     return this.itemRepository.save({ ...item, quantity });
   }
 }
