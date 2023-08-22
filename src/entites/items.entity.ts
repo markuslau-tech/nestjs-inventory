@@ -6,9 +6,9 @@ export class Item extends BaseEntity {
   @Column({ length: 128, unique: true })
   name: string;
 
-  @Column()
+  @Column({ name: 'qty' })
   quantity: number;
 
   @Column()
-  notifyNo: number;
+  notifyThreshold: number;
 }

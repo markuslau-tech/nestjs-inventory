@@ -37,7 +37,7 @@ export class InventoryService {
 
   async updateQuantity(id: number, quantity: number): Promise<Item> {
     const item = await this.itemRepository.findOneBy({ id });
-    if (quantity <= item.notifyNo) {
+    if (quantity <= item.notifyThreshold) {
       console.log('Warning!');
       await this.notifyQueue.add('inventory', item);
     }

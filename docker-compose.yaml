@@ -12,15 +12,15 @@ services:
       - 5432:5432
     restart: on-failure:3
 
-  pgweb:
-    image: sosedoff/pgweb
-    depends_on:
-      - postgres
-    environment:
-      DATABASE_URL: postgres://username:password@postgres:5432/inventory?sslmode=disable
-    ports:
-      - 8081:8081
-    restart: on-failure:3
+  # pgweb:
+  #   image: sosedoff/pgweb
+  #   depends_on:
+  #     - postgres
+  #   environment:
+  #     DATABASE_URL: postgres://username:password@postgres:5432/inventory?sslmode=disable
+  #   ports:
+  #     - 8081:8081
+  #   restart: on-failure:3
 
   redis:
     image: redis:latest
